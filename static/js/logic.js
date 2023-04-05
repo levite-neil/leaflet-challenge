@@ -18,10 +18,12 @@ let url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.ge
 
 //Get GeoJSON data
 d3.json(url).then(function (data){
+    //pass data features to function
     createFeatures(data.features);
 
 });
 
+//Function gets the popup menu items data from features, creates markers, and calls the createMap function 
 function createFeatures(quakeData){
     var earthquakes = L.geoJson(quakeData, {
 
@@ -34,7 +36,7 @@ function createFeatures(quakeData){
     createMap(earthquakes);
 
 }
-//Create markers
+//Creates markers with feature and location data from goejson
 function createMarkers(feature, location){
 
     var options = {
@@ -48,12 +50,12 @@ function createMarkers(feature, location){
      };
      return L.circleMarker(location,options);
 }
-
+//Returns the popup data from the features
 function popupdata(feature, layer){
     return layer.bindPopup(`<h2>${feature.properties.place}</h2><h3>Magnatude: ${feature.properties.mag}</h3><hr><p>${new Date(feature.properties.time)}</p>`);
 }
 
-//Create map
+//Creates the map and calls the legend function
 function createMap(earthquakes){
     
     // Create map layers
@@ -73,54 +75,35 @@ function createMap(earthquakes){
 
 }
 
-// function quakeLegend(myMap){
-//     let legend = L.control({
-//         position:"bottomright"
-//     });
-
-//     legend.onAdd = function(myMap) {
-//         let div = L.DomUtil.create("div", "legend");
-        
-//         let limits = ['-10-10','10-30','30-50','50-70','70-90','90+'];
-//         let colors = ["green","lime","yellow","orange","darkorange","red"];
-//         let labels = [];
-
-//         // Add .
-//         let legendInfo = '<h1>Earthquake Depth</h1>' +
-//             '<div class="labels">' + 
-//             '</div>';
-
-//         div.innerHTML = legendInfo;
-
-//         limits.forEach(function(limit, index) {
-//             labels.push(`<li style="background: ${colors[index]}">${limit}</li>`);
-//         });
-
-//         div.innerHTML += "<i>" + labels.join("<br>") + "</i>";
-//         return div;
-
-//     };
-//     //Adding the legend to the map
-//     legend.addTo(myMap);
-// }
+//Creates the legend for the map
 function quakeLegend(myMap){
-/*Legend specific*/
-var legend = L.control({ position: "bottomleft" });
+    let legend = L.control({
+        position:"bottomright"
+    });
 
-legend.onAdd = function(myMap) {
-  var div = L.DomUtil.create("div", "legend");
-  div.innerHTML += "<h4>Tegnforklaring</h4>";
-  div.innerHTML += '<i style="background: #477AC2"></i><span>Water</span><br>';
-  div.innerHTML += '<i style="background: #448D40"></i><span>Forest</span><br>';
-  div.innerHTML += '<i style="background: #E6E696"></i><span>Land</span><br>';
-  div.innerHTML += '<i style="background: #E8E6E0"></i><span>Residential</span><br>';
-  div.innerHTML += '<i style="background: #FFFFFF"></i><span>Ice</span><br>';
-  div.innerHTML += '<i class="icon" style="background-image: url(https://d30y9cdsu7xlg0.cloudfront.net/png/194515-200.png);background-repeat: no-repeat;"></i><span>Grænse</span><br>';
-  
-  
+    legend.onAdd = function(myMap) {
+        let div = L.DomUtil.create("div", "legend");
+        
+        let limits = ['-10-10','10-30','30-50','50-70','70-90','90+'];
+        let colors = ["green","lime","yellow","orange","darkorange","red"];
+        let labels = [];
 
-  return div;
-};
+        // Add .
+        let legendInfo = '<h1>Earthquake Depth</h1>' +
+            '<div class="labels">' + 
+            '</div>';
 
-legend.addTo(myMap);
+        div.innerHTML = legendInfo;
+
+        limits.forEach(function(limit, index) {
+            labels.push(`<i style="background-color: ${colors[index]}"></i><span>${limit}</span><br>`);
+        });
+
+        div.innerHTML += "<div>" + labels.join("") + "</div>";
+        return div;
+
+    };
+    //Adding the legend to the map
+    legend.addTo(myMap);
 }
+
