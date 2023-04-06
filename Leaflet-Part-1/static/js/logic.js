@@ -1,6 +1,6 @@
 //function for setting size
 function sizeMarker(mag){
-    return mag * 5;
+    return mag * 4;
 }
 
 // function for setting color
