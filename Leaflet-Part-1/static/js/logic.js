@@ -88,7 +88,7 @@ function quakeLegend(myMap){
         let colors = ["green","lime","yellow","orange","darkorange","red"];
         let labels = [];
 
-        // Add .
+        
         let legendInfo = '<h1>Earthquake Depth</h1>' +
             '<div class="labels">' + 
             '</div>';
